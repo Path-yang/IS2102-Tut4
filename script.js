@@ -31,31 +31,37 @@ if (document.getElementById('workoutForm')) {
     function addExercise(number) {
         const exercisesList = document.getElementById('exercisesList');
 
+        // Remove placeholder if it exists
+        const placeholder = exercisesList.querySelector('.exercises-placeholder');
+        if (placeholder) {
+            placeholder.remove();
+        }
+
         const exerciseDiv = document.createElement('div');
         exerciseDiv.className = 'exercise-item';
         exerciseDiv.id = `exercise-${number}`;
 
         exerciseDiv.innerHTML = `
             <div class="exercise-header">
-                <span class="exercise-number">Exercise ${number}</span>
+                <span class="exercise-number">💪 Exercise ${number}</span>
                 <button type="button" class="remove-exercise" onclick="removeExercise(${number})">×</button>
             </div>
             <div class="exercise-fields">
                 <div class="form-group">
                     <label for="exerciseName-${number}">Exercise Name</label>
-                    <input type="text" id="exerciseName-${number}" name="exerciseName-${number}" required>
+                    <input type="text" id="exerciseName-${number}" name="exerciseName-${number}" placeholder="e.g., Bench Press" required>
                 </div>
                 <div class="form-group">
                     <label for="sets-${number}">Sets</label>
-                    <input type="number" id="sets-${number}" name="sets-${number}" min="1" required>
+                    <input type="number" id="sets-${number}" name="sets-${number}" min="1" placeholder="3" required>
                 </div>
                 <div class="form-group">
                     <label for="reps-${number}">Reps</label>
-                    <input type="number" id="reps-${number}" name="reps-${number}" min="1" required>
+                    <input type="number" id="reps-${number}" name="reps-${number}" min="1" placeholder="10" required>
                 </div>
                 <div class="form-group">
                     <label for="weight-${number}">Weight (kg, optional)</label>
-                    <input type="number" id="weight-${number}" name="weight-${number}" min="0" step="0.5">
+                    <input type="number" id="weight-${number}" name="weight-${number}" min="0" step="0.5" placeholder="50">
                 </div>
             </div>
         `;
@@ -68,6 +74,18 @@ if (document.getElementById('workoutForm')) {
         const exerciseDiv = document.getElementById(`exercise-${number}`);
         if (exerciseDiv) {
             exerciseDiv.remove();
+        }
+
+        // If no exercises left, show placeholder again
+        const exercisesList = document.getElementById('exercisesList');
+        const remainingExercises = exercisesList.querySelectorAll('.exercise-item');
+        if (remainingExercises.length === 0) {
+            exercisesList.innerHTML = `
+                <div class="exercises-placeholder">
+                    <div class="placeholder-icon">🎯</div>
+                    <p>Click "Add Exercise" to start building your workout</p>
+                </div>
+            `;
         }
     }
 

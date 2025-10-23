@@ -15,15 +15,18 @@
             </header>
 
             <div class="stats-grid">
-                <div class="stat-card">
+                <div class="stat-card" data-icon="🏆">
+                    <div class="stat-icon">🏆</div>
                     <h3>Total Workouts</h3>
                     <p class="stat-number">0</p>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card" data-icon="📅">
+                    <div class="stat-icon">📅</div>
                     <h3>This Week</h3>
                     <p class="stat-number">0</p>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card" data-icon="📈">
+                    <div class="stat-icon">📈</div>
                     <h3>This Month</h3>
                     <p class="stat-number">0</p>
                 </div>
@@ -31,13 +34,25 @@
 
             <div class="action-section">
                 <button class="btn-primary btn-large" onclick="window.location.href='workout.html'">
-                    Log a Workout
+                    ➕ Log a Workout
                 </button>
+            </div>
+
+            <div class="motivation-banner">
+                <div class="banner-icon">🔥</div>
+                <div class="banner-content">
+                    <h3>Ready to crush your fitness goals?</h3>
+                    <p>Start tracking your workouts today and see your progress grow!</p>
+                </div>
             </div>
 
             <div class="recent-workouts">
                 <h2>Recent Workouts</h2>
-                <p class="empty-state">No workouts logged yet</p>
+                <div class="empty-state">
+                    <div class="empty-icon">🏃</div>
+                    <p>No workouts logged yet</p>
+                    <p class="empty-hint">Click "Log a Workout" to get started</p>
+                </div>
             </div>
         </div>
     </div>
