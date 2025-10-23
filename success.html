@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workout Tracker - Success</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="success-box">
+            <div class="success-icon">✓</div>
+            <h1>Workout Logged Successfully!</h1>
+            <p class="success-message">Your workout has been recorded</p>
+
+            <div class="workout-summary">
+                <h2>Summary</h2>
+                <div class="summary-item">
+                    <span class="label">Date:</span>
+                    <span class="value" id="summaryDate">-</span>
+                </div>
+                <div class="summary-item">
+                    <span class="label">Type:</span>
+                    <span class="value" id="summaryType">-</span>
+                </div>
+                <div class="summary-item">
+                    <span class="label">Duration:</span>
+                    <span class="value" id="summaryDuration">-</span>
+                </div>
+                <div class="summary-item">
+                    <span class="label">Exercises:</span>
+                    <span class="value" id="summaryExercises">-</span>
+                </div>
+            </div>
+
+            <div class="success-actions">
+                <button class="btn-primary" onclick="window.location.href='workout.html'">Log Another Workout</button>
+                <button class="btn-secondary" onclick="window.location.href='dashboard.html'">Back to Dashboard</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
