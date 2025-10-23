@@ -97,22 +97,150 @@ if (document.getElementById('workoutForm')) {
         const workoutDate = document.getElementById('workoutDate').value;
         const workoutType = document.getElementById('workoutType');
         const workoutTypeText = workoutType.options[workoutType.selectedIndex].text;
+        const workoutTypeValue = workoutType.value;
         const duration = document.getElementById('duration').value;
+        const notes = document.getElementById('notes').value;
 
-        // Count exercises
-        const exercises = document.querySelectorAll('.exercise-item').length;
+        // Collect exercise details
+        const exerciseItems = document.querySelectorAll('.exercise-item');
+        const exerciseDetails = [];
+
+        exerciseItems.forEach((item, index) => {
+            const id = item.id.split('-')[1];
+            const name = document.getElementById(`exerciseName-${id}`).value;
+            const sets = document.getElementById(`sets-${id}`).value;
+            const reps = document.getElementById(`reps-${id}`).value;
+            const weight = document.getElementById(`weight-${id}`).value;
+
+            exerciseDetails.push({
+                name: name,
+                sets: sets,
+                reps: reps,
+                weight: weight || '-'
+            });
+        });
+
+        // Create workout object
+        const workout = {
+            id: Date.now(),
+            date: workoutDate,
+            type: workoutTypeText,
+            typeValue: workoutTypeValue,
+            duration: duration,
+            exercises: exerciseDetails,
+            exerciseCount: exerciseDetails.length,
+            notes: notes,
+            timestamp: new Date().toISOString()
+        };
+
+        // Save to localStorage
+        let workouts = JSON.parse(localStorage.getItem('workouts') || '[]');
+        workouts.unshift(workout); // Add to beginning of array
+        localStorage.setItem('workouts', JSON.stringify(workouts));
 
         // Store data in sessionStorage for success page
         sessionStorage.setItem('workoutData', JSON.stringify({
             date: workoutDate,
             type: workoutTypeText,
             duration: duration,
-            exercises: exercises
+            exercises: exerciseDetails.length
         }));
 
         // Navigate to success page
         window.location.href = 'success.html';
     });
+}
+
+// Dashboard Handler
+if (window.location.pathname.includes('dashboard.html') || window.location.pathname.endsWith('/')) {
+    // Load workouts from localStorage
+    const workouts = JSON.parse(localStorage.getItem('workouts') || '[]');
+
+    // Update stats
+    const totalWorkouts = workouts.length;
+
+    // Calculate this week's workouts
+    const now = new Date();
+    const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const thisWeek = workouts.filter(w => new Date(w.date) >= weekAgo).length;
+
+    // Calculate this month's workouts
+    const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+    const thisMonth = workouts.filter(w => new Date(w.date) >= monthAgo).length;
+
+    // Update stat cards
+    const statCards = document.querySelectorAll('.stat-card');
+    if (statCards.length >= 3) {
+        statCards[0].querySelector('.stat-number').textContent = totalWorkouts;
+        statCards[1].querySelector('.stat-number').textContent = thisWeek;
+        statCards[2].querySelector('.stat-number').textContent = thisMonth;
+    }
+
+    // Display recent workouts
+    const recentWorkoutsDiv = document.querySelector('.recent-workouts');
+    if (recentWorkoutsDiv && workouts.length > 0) {
+        // Remove empty state
+        const emptyState = recentWorkoutsDiv.querySelector('.empty-state');
+        if (emptyState) {
+            emptyState.remove();
+        }
+
+        // Create workout list
+        const workoutList = document.createElement('div');
+        workoutList.className = 'workout-list';
+
+        // Show last 5 workouts
+        workouts.slice(0, 5).forEach(workout => {
+            const workoutCard = document.createElement('div');
+            workoutCard.className = 'workout-card';
+
+            const typeIcon = {
+                'strength': '💪',
+                'cardio': '🏃',
+                'flexibility': '🧘',
+                'sports': '⚽'
+            }[workout.typeValue] || '💪';
+
+            workoutCard.innerHTML = `
+                <div class="workout-card-header">
+                    <div class="workout-type">
+                        <span class="workout-icon">${typeIcon}</span>
+                        <span class="workout-type-text">${workout.type}</span>
+                    </div>
+                    <span class="workout-date">${formatDate(workout.date)}</span>
+                </div>
+                <div class="workout-card-body">
+                    <div class="workout-detail">
+                        <span class="detail-label">Duration:</span>
+                        <span class="detail-value">${workout.duration} min</span>
+                    </div>
+                    <div class="workout-detail">
+                        <span class="detail-label">Exercises:</span>
+                        <span class="detail-value">${workout.exerciseCount}</span>
+                    </div>
+                </div>
+            `;
+
+            workoutList.appendChild(workoutCard);
+        });
+
+        recentWorkoutsDiv.appendChild(workoutList);
+    }
+
+    // Helper function to format date
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        const today = new Date();
+        const yesterday = new Date(today.getTime() - 24 * 60 * 60 * 1000);
+
+        if (date.toDateString() === today.toDateString()) {
+            return 'Today';
+        } else if (date.toDateString() === yesterday.toDateString()) {
+            return 'Yesterday';
+        } else {
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        }
+    }
 }
 
 // Success Page Handler
