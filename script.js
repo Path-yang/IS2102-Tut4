@@ -18,6 +18,15 @@ if (document.getElementById('workoutForm')) {
         dateInput.value = today;
     }
 
+    // Prevent negative numbers in duration field
+    const durationInput = document.getElementById('duration');
+    if (durationInput) {
+        durationInput.addEventListener('input', function(e) {
+            if (this.value < 0) this.value = 0;
+            if (this.value > 1440) this.value = 1440; // Max 24 hours
+        });
+    }
+
     // Add Exercise Button
     const addExerciseBtn = document.getElementById('addExerciseBtn');
     if (addExerciseBtn) {
@@ -53,20 +62,40 @@ if (document.getElementById('workoutForm')) {
                 </div>
                 <div class="form-group">
                     <label for="sets-${number}">Sets</label>
-                    <input type="number" id="sets-${number}" name="sets-${number}" min="1" placeholder="3" required>
+                    <input type="number" id="sets-${number}" name="sets-${number}" min="1" max="100" step="1" placeholder="3" required>
                 </div>
                 <div class="form-group">
                     <label for="reps-${number}">Reps</label>
-                    <input type="number" id="reps-${number}" name="reps-${number}" min="1" placeholder="10" required>
+                    <input type="number" id="reps-${number}" name="reps-${number}" min="1" max="1000" step="1" placeholder="10" required>
                 </div>
                 <div class="form-group">
                     <label for="weight-${number}">Weight (kg, optional)</label>
-                    <input type="number" id="weight-${number}" name="weight-${number}" min="0" step="0.5" placeholder="50">
+                    <input type="number" id="weight-${number}" name="weight-${number}" min="0" max="1000" step="0.5" placeholder="50">
                 </div>
             </div>
         `;
 
         exercisesList.appendChild(exerciseDiv);
+
+        // Add validation for number inputs in the new exercise
+        const setsInput = document.getElementById(`sets-${number}`);
+        const repsInput = document.getElementById(`reps-${number}`);
+        const weightInput = document.getElementById(`weight-${number}`);
+
+        setsInput.addEventListener('input', function() {
+            if (this.value < 0) this.value = 0;
+            if (this.value > 100) this.value = 100;
+        });
+
+        repsInput.addEventListener('input', function() {
+            if (this.value < 0) this.value = 0;
+            if (this.value > 1000) this.value = 1000;
+        });
+
+        weightInput.addEventListener('input', function() {
+            if (this.value < 0) this.value = 0;
+            if (this.value > 1000) this.value = 1000;
+        });
     }
 
     // Remove Exercise Function (global scope)
