@@ -82,11 +82,27 @@ body {
     animation: bounce 2s ease-in-out infinite;
 }
 
+.login-info {
+    margin-top: 20px;
+}
+
+.demo-notice {
+    text-align: center;
+    background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+    color: #1a1a1a;
+    font-size: 14px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    border: 2px dashed #d0d0d0;
+    font-weight: 500;
+    animation: pulse 2s ease-in-out infinite;
+}
+
 .login-hint {
     text-align: center;
     color: #999;
     font-size: 14px;
-    margin-top: 20px;
     font-style: italic;
 }
 
